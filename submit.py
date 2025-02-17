@@ -1,6 +1,7 @@
 import random
 import string
 import cherrypy
+import json
 
 class Generator(object):
     @cherrypy.expose
@@ -17,10 +18,18 @@ class Generator(object):
             </html> 
         """
 
-    # 127.0.0.1:8080/generate
+    # 127.0.0.1:8080/generate?length=5
     @cherrypy.expose
     def generate(self, length=5):
         return ''.join(random.sample(string.hexdigits, int(length)))
+
+    # 127.0.0.1:8080/json
+    @cherrypy.expose
+    def json(self):
+        res = "Pong"
+        return json.dumps(
+            {"Ping": res}
+        )
 
 if __name__ == "__main__":
     cherrypy.quickstart( Generator() )
