@@ -1,7 +1,8 @@
 import random
 import string
-import cherrypy
 import json
+
+import cherrypy
 
 class StringGenerator(object):
     @cherrypy.expose
@@ -18,9 +19,9 @@ class StringGenerator(object):
             </html> 
         """
 
-    # 127.0.0.1:8080/generate?length=5
+    # 127.0.0.1:8080/generate?length=8
     @cherrypy.expose
-    def generate(self, length=5):
+    def generate(self, length=8):
         some_string = ''.join(random.sample(string.hexdigits, int(length)))
         cherrypy.session['mystring'] = some_string
         return some_string
@@ -33,7 +34,7 @@ class StringGenerator(object):
             {"Ping": res}
         )
 
-    # 127.0.0.1:8080/json
+    # 127.0.0.1:8080/display
     @cherrypy.expose
     def display(self):
         return cherrypy.session['mystring']
