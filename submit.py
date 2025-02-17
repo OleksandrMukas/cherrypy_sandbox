@@ -3,7 +3,7 @@ import string
 import cherrypy
 import json
 
-class Generator(object):
+class StringGenerator(object):
     @cherrypy.expose
     def index(self):
         return """
@@ -21,7 +21,9 @@ class Generator(object):
     # 127.0.0.1:8080/generate?length=5
     @cherrypy.expose
     def generate(self, length=5):
-        return ''.join(random.sample(string.hexdigits, int(length)))
+        some_string = ''.join(random.sample(string.hexdigits, int(length)))
+        cherrypy.session['mystring'] = some_string
+        return some_string
 
     # 127.0.0.1:8080/json
     @cherrypy.expose
@@ -31,5 +33,15 @@ class Generator(object):
             {"Ping": res}
         )
 
+    # 127.0.0.1:8080/json
+    @cherrypy.expose
+    def display(self):
+        return cherrypy.session['mystring']
+
 if __name__ == "__main__":
-    cherrypy.quickstart( Generator() )
+    conf = {
+        '/': {
+            'tools.sessions.on': True
+        }
+    }
+    cherrypy.quickstart(StringGenerator(), '/', conf )
